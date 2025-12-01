@@ -13,6 +13,8 @@ x_train = np.array([1.0, 1.7, 2.0, 2.5, 3.0, 3.2])
 y_train = np.array([250, 300, 480,  430, 630, 730,])
 m = x_train.shape[0] 
 
+###CostFunction###
+
 #Means#
 x_mean = np.mean(x_train)
 y_mean = np.mean(y_train)
@@ -41,6 +43,8 @@ j_i = (Y - y_train) **2
 j_manual = j_i.sum()
 j = j_manual / (2 * m)
 
+
+#Shortened Function#
 def compute_cost(x, y, w, b): 
 
     # number of training examples
@@ -57,15 +61,15 @@ def compute_cost(x, y, w, b):
 
 total_cost = compute_cost(x_train, y_train, w, b)
 
-#Gradient Descent#
-a = 0.01
-iterations=1000
+###Gradient Descent###
+
+iterations = 1000
 
 for i in range(iterations):
 
     Y = w * x_train + b
     a = 0.01
-
+    
     #Gradient#
     gradientW = 1 / m * np.sum((Y - y_train) * x_train)
     gradientB = 1 / m * (np.sum(Y - y_train))
@@ -74,8 +78,9 @@ for i in range(iterations):
     newW = w - a * gradientW
     newB = b - a * gradientB
 
-print(newW)
-print(newB)
+print(newW, newB)
+
+
 
 def compute_gradient(x, y, w, b): 
     
