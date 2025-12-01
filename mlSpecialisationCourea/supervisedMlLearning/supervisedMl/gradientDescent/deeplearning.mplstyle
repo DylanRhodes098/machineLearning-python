@@ -1,0 +1,8 @@
+axes.titlesize   : 18
+axes.labelsize   : 14
+lines.linewidth  : 2
+lines.markersize : 6
+font.size        : 12
+grid.color       : gray
+grid.linestyle   : --
+grid.linewidth   : 0.5
