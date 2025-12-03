@@ -10,7 +10,7 @@ from lab_utils_uni import (
 )
 
 x_train = np.array([1.0, 1.7, 2.0, 2.5, 3.0, 3.2])
-y_train = np.array([250, 300, 480,  430, 630, 730,])
+y_train = np.array([250, 300, 480,  430, 630, 730])
 m = x_train.shape[0] 
 a = 0.01
 iterations = 1000
