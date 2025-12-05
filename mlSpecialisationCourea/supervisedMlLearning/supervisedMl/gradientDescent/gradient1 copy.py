@@ -10,10 +10,8 @@ from lab_utils_uni import (
 )
 
 x_train = np.array([1.0, 1.7, 2.0, 2.5, 3.0, 3.2])
-y_train = np.array([250, 300, 480,  430, 630, 730])
+y_train = np.array([250, 300, 480,  430, 630, 730,])
 m = x_train.shape[0] 
-a = 0.01
-iterations = 1000
 
 ###CostFunction###
 
@@ -33,6 +31,35 @@ def fwb (x, y):
 
 fwb, w, b = fwb(x_train, y_train)
 
+#Long fwb function#
+x_mean = np.mean(x_train)
+y_mean = np.mean(y_train)
+
+#Movements#
+xi_movement = x_train - x_mean
+yi_movement = y_train - y_mean
+
+#Numerator#
+z = np.sum(xi_movement * yi_movement)
+
+#Denominator#
+q = np.sum(xi_movement **2)
+
+#w#
+w = z / q 
+
+#b#
+b = y_mean - w * x_mean
+
+#Result#
+Y = w * x_train + b
+
+#j#
+j_i = (Y - y_train) **2
+j_manual = j_i.sum()
+j = j_manual / (2 * m)
+
+
 #Shortened Function#
 def compute_cost(x, y, w, b): 
 
@@ -48,61 +75,31 @@ def compute_cost(x, y, w, b):
 
     return total_cost   
 
+total_cost = compute_cost(x_train, y_train, w, b)
+
 ###Gradient Descent###
 
-def computeGradient(x, y, w, b, m, a, iterations):
+iterations = 1000
 
-    for i in range(iterations):
+for i in range(iterations):
 
-        Y = w * x + b
-   
+    Y = w * x_train + b
+    a = 0.01
+    
     #Gradient#
-    gradientW = 1 / m * np.sum((Y - y) * x)
-    gradientB = 1 / m * (np.sum(Y - y))
+    gradientW = 1 / m * np.sum((Y - y_train) * x_train)
+    gradientB = 1 / m * (np.sum(Y - y_train))
 
     #New#
     newW = w - a * gradientW
     newB = b - a * gradientB
 
-    return float(newW), float(newB)
-
-GradientDescent = computeGradient(x_train, y_train, w, b, m, a, iterations)
-
-
-def computeDJ(x, y, fwb):
-    m = x.shape[0]
-
-    dW = (1/m) * ((fwb - y) * x).sum()
-    dB = (1/m) * (fwb - y).sum()
-
-    return dW, dB
-
-def computeGradient(x, y, w, b, dW, dB, a):
-
-    newW = w - a * dW
-    newB = b - a * dB
-
-    return newW, newB
-
-def loop(x, y, newW, newB, computeGradient, numiters):
-
-    jHistory = []
-    pHistory = []
-
-    for i in range(numiters):
-        if i > 1000:
-            jHistory.append( computeGradient(x, y, newW , newB))
-            pHistory.append([w,b])
-
-        return jHistory, pHistory
-
-
-
+print(newW, newB)
 
 
 
 def compute_gradient(x, y, w, b): 
-
+    
     # Number of training examples
     m = x.shape[0]    
     dj_dw = 0
@@ -118,7 +115,6 @@ def compute_gradient(x, y, w, b):
     dj_db = dj_db / m 
         
     return dj_dw, dj_db
-
 
 def gradient_descent(x, y, w_in, b_in, alpha, num_iters, cost_function, gradient_function): 
     
@@ -140,3 +136,12 @@ def gradient_descent(x, y, w_in, b_in, alpha, num_iters, cost_function, gradient
         if i<100000:      # prevent resource exhaustion 
             J_history.append( cost_function(x, y, w , b))
             p_history.append([w,b])
+        # Print cost every at intervals 10 times or as many iterations if < 10
+        if i% math.ceil(num_iters/10) == 0:
+            print(f"Iteration {i:4}: Cost {J_history[-1]:0.2e} ",
+                  f"dj_dw: {dj_dw: 0.3e}, dj_db: {dj_db: 0.3e}  ",
+                  f"w: {w: 0.3e}, b:{b: 0.5e}")
+ 
+    return w, b, J_history, p_history #return w and J,w history for graphing
+
+
