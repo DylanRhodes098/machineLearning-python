@@ -18,20 +18,20 @@ iterations = 1000
 ###CostFunction###
 
 #Short fwb function#
-def fwb (x, y):
+def initialFwb(x, y):
     xMean = x.mean()
     yMean = y.mean()
 
     numerator = ((x - xMean) * (y - yMean)).sum()
     denominator = ((x - xMean) ** 2).sum()
 
-    w = numerator / denominator
-    b = yMean - w * xMean
-    fwb = w * x + b
+    initialW = numerator / denominator
+    initialB = yMean - initialW * xMean
+    fwb = initialW * x + initialB
 
-    return fwb, w, b
+    return fwb, initialW, initialB
 
-fwb, w, b = fwb(x_train, y_train)
+fwb, initialW, initialB = initialFwb(x_train, y_train)
 
 #Shortened Function#
 def compute_cost(x, y, w, b): 
@@ -64,14 +64,14 @@ def computeGradient(w, b, dW, dB, a):
     newB = b - a * dB
     return newW, newB
 
-def loop(x, y, w_init, b_init, a, numiters):
+def loop(x, y, w_init, b_init, a, iterations):
     w = w_init
     b = b_init
 
     jHistory = []
     wbHistory = []
 
-    for i in range(numiters):
+    for i in range(iterations):
         # 1) predictions
         preds = fwb(x, w, b)
 
@@ -88,5 +88,12 @@ def loop(x, y, w_init, b_init, a, numiters):
         if i < 1000:
             jHistory.append(cost)
             wbHistory.append((w, b))
+        
+        
 
-    return w, b, jHistory, wbHistory
+
+    return w, b
+
+GradientDescent = loop(x_train, y_train, initialW, initialB, a, iterations)
+
+print(GradientDescent)
